@@ -2,8 +2,45 @@
   remote_user: root
 
   tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      become: yes
+
     - name: install git
       ansible.builtin.apt:
         name: git
         state: present
       become: yes
+
+    - name: create user
+      ansible.builtin.user:
+        name: "John Snow"
+        password: "12345"
+        shell: /bin/bash
+        state: present
+        group: admins, developers
+      become: yes
+      tags: [user]
+
+    - name: create user
+      ansible.builtin.user:
+        name: "Sansa Stark"
+        group: admins
+        state: present
+      become: yes
+      tags: [user]
+
+    - name: delete user
+      ansible.builtin.user:
+        name: "Sansa Stark"
+        state: absent
+      become: yes
+      tags: [delete-user]
+
+    - name: delete user
+      ansible.builtin.user:
+        name: "John Snow"
+        state: absent
+      become: yes
+      tags: [delete-user]
