@@ -1,7 +1,7 @@
 - hosts: webservers
   remote_user: root
   vars:
-    nginx_port: 80
+    nginx_port: 8080
     root_dir: /usr/share/nginx/html
 
   tasks:
@@ -19,7 +19,7 @@
       become: yes
 
     - name: copy index.html file
-      ansible.builtin.copy:
+      ansible.builtin.template:
         src: ../files/index.html
         dest: "{{root_dir}}/index.html"
       become: yes
