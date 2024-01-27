@@ -1,6 +1,12 @@
 - hosts: webservers
   remote_user: root
   gather_facts: no
+  vars:
+    users:
+      - name: bamie
+      - name: bansa
+      - name: bobert
+
 
   tasks:
     - name: update apt cache
@@ -16,32 +22,28 @@
 
     - name: create user
       ansible.builtin.user:
-        name: "John Snow"
-        password: "12345"
-        shell: /bin/bash
+        name: "{{ item.name }}"
         state: present
-        group: admins, developers
+      loop: "{{ users }}"
       become: yes
       tags: [user]
 
-    - name: create user
-      ansible.builtin.user:
-        name: "Sansa Stark"
-        group: admins
-        state: present
-      become: yes
-      tags: [user]
+    - name: create git config
+      ansible.builtin.template:
+        src: ../files/gitconfig
+        dest: /home/{{ item.name }}/.gitconfig
+      loop: "{{ users }}"
 
-    - name: delete user
-      ansible.builtin.user:
-        name: "Sansa Stark"
-        state: absent
-      become: yes
-      tags: [delete-user]
+    - name: create ssh directory
+      ansible.builtin.file:
+         path: /home/{{ item.name }}/.ssh
+         state: directory
+         mode: 0755
+      loop: "{{ users }}"
 
-    - name: delete user
-      ansible.builtin.user:
-        name: "John Snow"
-        state: absent
-      become: yes
-      tags: [delete-user]
+    - name: add ssh key
+      ansible.builtin.copy:
+        src: ../files/id_rsa
+        dest: /home/{{ item.name }}/.ssh/authorized_keys
+        mode: 0644
+      loop: "{{ users }}"

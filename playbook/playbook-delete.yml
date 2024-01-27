@@ -1,9 +1,17 @@
 - hosts: webservers
   remote_user: root
+  vars:
+    users:
+      - name: bamie
+      - name: bansa
+      - name: bobert
+
 
   tasks:
-    - name: remove git
-      ansible.builtin.apt:
-        name: git
-        state: absent
-      become: yes
+      - name: delete user
+        ansible.builtin.user:
+          name: "{{ item.name }}"
+          state: absent
+        become: yes
+        loop: "{{ users }}"
+        tags: [delete-user]
