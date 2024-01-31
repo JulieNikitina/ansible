@@ -8,9 +8,16 @@
     str: "This is server {{ hostname }}"
 
   tasks:
-#    - name: Print all available facts
-#      ansible.builtin.debug:
-#        var: ansible_facts
+    - name: execute cowsay
+      ansible.builtin.command: cowsay "{{ str }}"
+      register: cowsay_result
+      become: yes
+
+    - name: print cowsay result
+      ansible.builtin.debug:
+        msg: "{{ cowsay_result.stdout_lines }}"
+      become: yes
+
     - name: install nginx
       ansible.builtin.apt:
         name: nginx
@@ -26,7 +33,7 @@
 
     - name: copy index.html file
       ansible.builtin.template:
-        src: ../files/index.html
+        src: ../files/index.html.j2
         dest: "{{root_dir}}/index.html"
       become: yes
 
