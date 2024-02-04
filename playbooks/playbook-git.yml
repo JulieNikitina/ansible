@@ -1,0 +1,17 @@
+- hosts: webservers
+  remote_user: root
+
+  roles:
+    - role: nginxinc.nginx
+    - role: shaneholloman.git
+    - role: '../roles/git'
+
+  tasks:
+    - name: Install Nginx with role
+      ansible.builtin.include_role:
+        name: nginxinc.nginx
+
+    - name: Install Git with role
+      ansible.builtin.include_role:
+        name: shaneholloman.git
+

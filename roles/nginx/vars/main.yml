@@ -1,0 +1,4 @@
+nginx_port: 8080
+root_dir: /usr/share/nginx/html
+hostname: "{{ ansible_facts['hostname'] }}"
+str: "This is server {{ hostname }}"

@@ -11,7 +11,7 @@
   excludesFile = ~/.gitignore_global
   editor = vim
 [user]
-  email = {{user.name}}@test.ru
-  name = {{user.name}}
+  email = {{item.name}}@test.ru
+  name = {{item.name}}
 [credential]
   helper = store

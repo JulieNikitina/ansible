@@ -13,11 +13,6 @@
       register: cowsay_result
       become: yes
 
-    - name: print cowsay result
-      ansible.builtin.debug:
-        msg: "{{ cowsay_result.stdout_lines }}"
-      become: yes
-
     - name: install nginx
       ansible.builtin.apt:
         name: nginx
